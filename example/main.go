@@ -12,7 +12,7 @@ func main() {
 	// Create a new dashboard
 	dashboard := bussola.NewDashboard("Analytics Dashboard", "Real-time performance metrics")
 
-	mainGrid := bussola.NewGrid("Main Grid", 3, 3)
+	mainGrid := bussola.NewGrid("Main Grid", 4, 3)
 
 	// Create some indicators
 	sales := bussola.NewIndicator("Total Sales", 15234.56)
@@ -46,20 +46,26 @@ func main() {
 		"color": "#1976D2",
 	}
 
-	// Create a table
 	userTable := bussola.NewTable("Recent Users", []string{"ID", "Name", "Last Access", "Status"})
 	userTable.Data = []map[string]interface{}{
 		{"id": 1, "name": "John Doe", "lastAccess": "2025-06-26", "status": "Active"},
 		{"id": 2, "name": "Jane Smith", "lastAccess": "2025-06-25", "status": "Inactive"},
 	}
 
+	filterBar := bussola.NewFilterBar("Filtros Gerais")
+	filterBar.AddFilter(bussola.NewFilterDate("Periodo", "period"))
+	filterBar.AddFilter(bussola.NewFilterSelect("Tipo de Problema", "problem_type", []string{"Todos", "Erro", "Aviso", "Info"}))
+	filterBar.AddFilter(bussola.NewFilterText("Nome do Cliente", "client_name"))
+	filterBar.AddFilter(bussola.NewFilterSearch("Pesquisar", "search", "Search by name or ID"))
+
 	// Add components to the grid
-	mainGrid.AddItem(sales, 0, 0, 1, 1)
-	mainGrid.AddItem(users, 0, 1, 1, 1)
-	mainGrid.AddItem(tma, 0, 2, 1, 1)
-	mainGrid.AddItem(nestedGrid, 1, 0, 1, 1)
-	mainGrid.AddItem(revenueChart, 1, 1, 1, 2) // Spans 2 columns
-	mainGrid.AddItem(userTable, 2, 0, 1, 3)
+	mainGrid.AddItem(filterBar, 0, 0, 1, 3)
+	mainGrid.AddItem(sales, 1, 0, 1, 1)
+	mainGrid.AddItem(users, 1, 1, 1, 1)
+	mainGrid.AddItem(tma, 1, 2, 1, 1)
+	mainGrid.AddItem(nestedGrid, 2, 0, 1, 1)
+	mainGrid.AddItem(revenueChart, 2, 1, 1, 2) // Spans 2 columns
+	mainGrid.AddItem(userTable, 3, 0, 1, 3)
 
 	// Set the main grid as the dashboard layout
 	dashboard.SetLayout(mainGrid)
