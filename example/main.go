@@ -65,7 +65,14 @@ func main() {
 	mainGrid.AddItem(tma, 1, 2, 1, 1)
 	mainGrid.AddItem(nestedGrid, 2, 0, 1, 1)
 	mainGrid.AddItem(revenueChart, 2, 1, 1, 2) // Spans 2 columns
-	mainGrid.AddItem(userTable, 3, 0, 1, 3)
+	mainGrid.AddItem(userTable, 3, 0, 1, 2)
+
+	ranking := bussola.NewRanking("Ranking de Clientes")
+	ranking.AddItem(bussola.NewRankingItem(1, "Empresa Alpha", "Maior faturamento", "https://randomuser.me/api/portraits/men/1.jpg"))
+	ranking.AddItem(bussola.NewRankingItem(2, "Empresa Beta", "Crescimento rápido", "https://randomuser.me/api/portraits/women/2.jpg"))
+	ranking.AddItem(bussola.NewRankingItem(3, "Empresa Gama", "Melhor avaliação", "https://randomuser.me/api/portraits/men/3.jpg"))
+	ranking.SetOrder("desc")
+	mainGrid.AddItem(ranking, 3, 2, 1, 1)
 
 	// Set the main grid as the dashboard layout
 	dashboard.SetLayout(mainGrid)

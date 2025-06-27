@@ -412,3 +412,65 @@ func (f *FilterColor) Render() map[string]interface{} {
 		"value": f.Value,
 	}
 }
+
+type RankingItem struct {
+	Position    int    `json:"position"`
+	ImageURL    string `json:"imageUrl,omitempty"`
+	Title       string `json:"title"`
+	Description string `json:"description,omitempty"`
+}
+
+func NewRankingItem(position int, title string, description string, imageURL string) RankingItem {
+	return RankingItem{
+		Position:    position,
+		ImageURL:    imageURL,
+		Title:       title,
+		Description: description,
+	}
+}
+
+type Ranking struct {
+	BaseWidget
+	Title string        `json:"title"`
+	Items []RankingItem `json:"items"`
+	Order string        `json:"order"` // "asc" ou "desc"
+}
+
+func NewRanking(title string) *Ranking {
+	return &Ranking{
+		Title: title,
+		Items: []RankingItem{},
+		Order: "desc",
+	}
+}
+
+func (r *Ranking) AddItem(item RankingItem) {
+	r.Items = append(r.Items, item)
+}
+
+func (r *Ranking) SetOrder(order string) {
+	if order == "asc" || order == "desc" {
+		r.Order = order
+	}
+}
+
+func (r *Ranking) Render() map[string]interface{} {
+	items := []map[string]interface{}{}
+	for _, it := range r.Items {
+		item := map[string]interface{}{
+			"position":    it.Position,
+			"title":       it.Title,
+			"description": it.Description,
+		}
+		if it.ImageURL != "" {
+			item["imageUrl"] = it.ImageURL
+		}
+		items = append(items, item)
+	}
+	return map[string]interface{}{
+		"type":  "ranking",
+		"title": r.Title,
+		"order": r.Order,
+		"items": items,
+	}
+}

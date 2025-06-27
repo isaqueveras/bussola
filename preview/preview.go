@@ -97,6 +97,8 @@ func getComponentName(component bussola.Component) string {
 		return "ProgressBar"
 	case *bussola.FilterBar:
 		return "FilterBar"
+	case *bussola.Ranking:
+		return "Ranking"
 	default:
 		return ""
 	}
@@ -330,6 +332,8 @@ func drawComponent(img *image.RGBA, x, y, w, h int, c color.Color, name string, 
 		title = c.Title
 	case *bussola.Grid:
 		title = c.Title
+	case *bussola.Ranking:
+		title = c.Title
 	}
 
 	if title != "" {
@@ -388,6 +392,8 @@ func getComponentColor(component bussola.Component) color.Color {
 		return color.RGBA{255, 255, 224, 255} // Light yellow
 	case *bussola.FilterBar:
 		return color.RGBA{220, 220, 220, 255} // Light gray
+	case *bussola.Ranking:
+		return color.RGBA{216, 191, 216, 255} // Light purple
 	default:
 		return color.RGBA{240, 240, 240, 255} // Light gray
 	}
