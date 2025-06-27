@@ -69,7 +69,7 @@ func GeneratePreview(dashboard *bussola.Dashboard, outputPath string) error {
 	defer f.Close()
 
 	return jpeg.Encode(f, img, &jpeg.Options{
-		Quality: 100,
+		Quality: 90,
 	})
 }
 

@@ -54,6 +54,38 @@ func (g *Grid) AddItem(component Component, row, col, rowSpan, colSpan int) {
 	g.Cells[row][col] = cell
 }
 
+func (g *Grid) AddNext(component Component, values ...int) {
+	rowSpan, colSpan := 1, 1
+	if len(values) > 0 {
+		rowSpan = values[0]
+	}
+
+	if len(values) > 1 {
+		colSpan = values[1]
+	}
+
+	for row := 0; row < g.Rows; row++ {
+		for col := 0; col < g.Columns; col++ {
+			occupied := false
+			for r := row; r < row+rowSpan && r < g.Rows; r++ {
+				for c := col; c < col+colSpan && c < g.Columns; c++ {
+					if g.Cells[r][c] != nil {
+						occupied = true
+						break
+					}
+				}
+				if occupied {
+					break
+				}
+			}
+			if !occupied {
+				g.AddItem(component, row, col, rowSpan, colSpan)
+				return
+			}
+		}
+	}
+}
+
 // Render generates a JSON representation of the grid
 func (g *Grid) Render() map[string]interface{} {
 	result := make(map[string]interface{})

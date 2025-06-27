@@ -63,21 +63,20 @@ func main() {
 
 	mainGrid.AddItem(filterBar, 0, 0, 1, 3)
 
+	// Adicionando indicadores automaticamente no grid de indicadores
 	indicators := bussola.NewGrid("Indicators", 2, 4)
-	indicators.AddItem(sales, 0, 0, 1, 1)
-	indicators.AddItem(users, 0, 1, 1, 1)
-	indicators.AddItem(tma, 0, 2, 1, 1)
-	indicators.AddItem(issues, 0, 3, 1, 1)
-
-	indicators.AddItem(sales, 1, 0, 1, 1)
-	indicators.AddItem(users, 1, 1, 1, 1)
-	indicators.AddItem(tma, 1, 2, 1, 1)
-	indicators.AddItem(issues, 1, 3, 1, 1)
-
+	indicators.AddNext(sales)
+	indicators.AddNext(users)
+	indicators.AddNext(sales)
+	indicators.AddNext(users)
+	indicators.AddNext(issues)
+	indicators.AddNext(tma)
+	indicators.AddNext(issues)
+	indicators.AddNext(tma)
 	mainGrid.AddItem(indicators, 1, 0, 1, 3)
 
 	mainGrid.AddItem(nestedGrid, 2, 0, 1, 1)
-	mainGrid.AddItem(revenueChart, 2, 1, 1, 2) // Spans 2 columns
+	mainGrid.AddItem(revenueChart, 2, 1, 1, 2)
 	mainGrid.AddItem(userTable, 3, 0, 1, 2)
 
 	ranking := bussola.NewRanking("Ranking de Clientes")
@@ -99,12 +98,9 @@ func main() {
 		FontFamily: "Inter, sans-serif",
 	})
 
-	// Generate and print the JSON
 	fmt.Printf("Dashboard JSON:\n%v\n", dashboard.GenerateJSON())
 
-	// Generate a preview image of the layout
-	if err := preview.GeneratePreview(dashboard, "dashboard_layout.jpg"); err != nil {
+	if err := preview.GeneratePreview(dashboard, "dashboard.jpg"); err != nil {
 		log.Fatalf("Error generating preview: %v", err)
 	}
-	fmt.Println("Layout preview generated as 'dashboard_layout.jpg'")
 }
