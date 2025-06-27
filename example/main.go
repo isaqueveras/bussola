@@ -29,8 +29,14 @@ func main() {
 	// Set the target URL for TMA
 	tma.Target = "http://localhost:4040/api/v1/query/tma/indicator"
 
-	conversion := bussola.NewProgressBar("Conversion Rate")
-	conversion.Value = 67.5
+	conversionRate := bussola.NewProgressBar("Conversion Rate")
+	conversionRate.Value = 75.0 // 75% conversion rate
+	conversionRate.MaxValue = 100.0
+	conversionRate.ShowPercent = true
+
+	nestedGrid := bussola.NewGrid("ProgressBar Grid", 2, 1)
+	nestedGrid.AddItem(conversionRate, 0, 0, 1, 1)
+	nestedGrid.AddItem(bussola.NewProgressBar("Total Conversion"), 1, 0, 1, 1)
 
 	// Create a chart
 	revenueChart := bussola.NewChart("Revenue Over Time", "line")
@@ -51,7 +57,7 @@ func main() {
 	mainGrid.AddItem(sales, 0, 0, 1, 1)
 	mainGrid.AddItem(users, 0, 1, 1, 1)
 	mainGrid.AddItem(tma, 0, 2, 1, 1)
-	mainGrid.AddItem(conversion, 1, 0, 1, 1)
+	mainGrid.AddItem(nestedGrid, 1, 0, 1, 1)
 	mainGrid.AddItem(revenueChart, 1, 1, 1, 2) // Spans 2 columns
 	mainGrid.AddItem(userTable, 2, 0, 1, 3)
 

@@ -57,7 +57,7 @@ func GeneratePreview(dashboard *bussola.Dashboard, outputPath string) error {
 				h := cell.RowSpan*cellHeight + (cell.RowSpan-1)*margin
 
 				// Draw component rectangle
-				drawComponent(img, x, y, w, h, getComponentColor(cell.Content), getComponentName(cell.Content))
+				drawComponent(img, x, y, w, h, getComponentColor(cell.Content), getComponentName(cell.Content), cell.Content)
 			}
 		}
 	}
@@ -95,11 +95,54 @@ func getComponentName(component bussola.Component) string {
 	case *bussola.ProgressBar:
 		return "ProgressBar"
 	default:
-		return "Component"
+		return ""
 	}
 }
 
-func drawComponent(img *image.RGBA, x, y, w, h int, c color.Color, name string) {
+func drawComponent(img *image.RGBA, x, y, w, h int, c color.Color, name string, comp ...bussola.Component) {
+	// Se for grid aninhado, desenha recursivamente
+	var component bussola.Component
+	if len(comp) > 0 {
+		component = comp[0]
+	}
+	if grid, ok := component.(*bussola.Grid); ok {
+		rows := grid.Rows
+		cols := grid.Columns
+		if rows == 0 || cols == 0 {
+			return
+		}
+		cellW := w / cols
+		cellH := h / rows
+		for row := range grid.Cells {
+			for col := range grid.Cells[row] {
+				cell := grid.Cells[row][col]
+				if cell != nil && cell.Content != nil {
+					x0 := x + col*cellW
+					y0 := y + row*cellH
+					cw := cell.ColSpan * cellW
+					ch := cell.RowSpan * cellH
+					// Chama recursivamente para desenhar o conteúdo da célula
+					drawComponent(img, x0, y0, cw, ch, getComponentColor(cell.Content), getComponentName(cell.Content), cell.Content)
+				}
+			}
+		}
+		// Escreve o nome do grid no topo
+		face := basicfont.Face7x13
+		label := name
+		labelWidth := font.MeasureString(face, label).Ceil()
+		labelX := x + (w-labelWidth)/2
+		labelY := y + 15
+		col := color.RGBA{30, 30, 30, 255}
+		d := &font.Drawer{
+			Dst:  img,
+			Src:  image.NewUniform(col),
+			Face: face,
+			Dot:  fixed.P(labelX, labelY),
+		}
+		d.DrawString(label)
+		return
+	}
+
 	// Draw filled rectangle
 	for i := x; i < x+w; i++ {
 		for j := y; j < y+h; j++ {
@@ -113,6 +156,7 @@ func drawComponent(img *image.RGBA, x, y, w, h int, c color.Color, name string) 
 		img.Set(i, y, borderColor)
 		img.Set(i, y+h-1, borderColor)
 	}
+
 	for j := y; j < y+h; j++ {
 		img.Set(x, j, borderColor)
 		img.Set(x+w-1, j, borderColor)
@@ -144,7 +188,9 @@ func getComponentColor(component bussola.Component) color.Color {
 	case *bussola.Table:
 		return color.RGBA{255, 182, 193, 255} // Light pink
 	case *bussola.ProgressBar:
-		return color.RGBA{255, 218, 185, 255} // Light orange
+		return color.RGBA{255, 228, 181, 255} // Light yellowish
+	case *bussola.Grid:
+		return color.RGBA{255, 255, 224, 255} // Light yellow
 	default:
 		return color.RGBA{240, 240, 240, 255} // Light gray
 	}
