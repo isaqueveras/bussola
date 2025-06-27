@@ -2,16 +2,17 @@ package main
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/isaqueveras/bussola"
+	"github.com/isaqueveras/bussola/preview"
 )
 
 func main() {
 	// Create a new dashboard
 	dashboard := bussola.NewDashboard("Analytics Dashboard", "Real-time performance metrics")
 
-	// Create a main grid with 2 rows and 3 columns
-	mainGrid := bussola.NewGrid("Main Grid", 2, 3)
+	mainGrid := bussola.NewGrid("Main Grid", 3, 3)
 
 	// Create some indicators
 	sales := bussola.NewIndicator("Total Sales", 15234.56)
@@ -21,6 +22,12 @@ func main() {
 
 	users := bussola.NewIndicator("Active Users", 1234)
 	users.Description = "Currently active users"
+
+	tma := bussola.NewIndicator("TMA", 2.5) // Average time to action in minutes
+	tma.Unit = "min"
+	tma.Description = "Average time to action (TMA)"
+	// Set the target URL for TMA
+	tma.Target = "http://localhost:4040/api/v1/query/tma/indicator"
 
 	conversion := bussola.NewProgressBar("Conversion Rate")
 	conversion.Value = 67.5
@@ -43,9 +50,10 @@ func main() {
 	// Add components to the grid
 	mainGrid.AddItem(sales, 0, 0, 1, 1)
 	mainGrid.AddItem(users, 0, 1, 1, 1)
-	mainGrid.AddItem(conversion, 0, 2, 1, 1)
-	mainGrid.AddItem(revenueChart, 1, 0, 1, 2) // Spans 2 columns
-	mainGrid.AddItem(userTable, 1, 2, 1, 1)
+	mainGrid.AddItem(tma, 0, 2, 1, 1)
+	mainGrid.AddItem(conversion, 1, 0, 1, 1)
+	mainGrid.AddItem(revenueChart, 1, 1, 1, 2) // Spans 2 columns
+	mainGrid.AddItem(userTable, 2, 0, 1, 3)
 
 	// Set the main grid as the dashboard layout
 	dashboard.SetLayout(mainGrid)
@@ -61,4 +69,10 @@ func main() {
 
 	// Generate and print the JSON
 	fmt.Printf("Dashboard JSON:\n%v\n", dashboard.GenerateJSON())
+
+	// Generate a preview image of the layout
+	if err := preview.GeneratePreview(dashboard, "dashboard_layout.jpg"); err != nil {
+		log.Fatalf("Error generating preview: %v", err)
+	}
+	fmt.Println("Layout preview generated as 'dashboard_layout.jpg'")
 }
