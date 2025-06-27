@@ -29,6 +29,9 @@ func main() {
 	// Set the target URL for TMA
 	tma.Target = "http://localhost:4040/api/v1/query/tma/indicator"
 
+	issues := bussola.NewIndicator("Total Issues", 4567)
+	issues.Unit = "Issues"
+
 	conversionRate := bussola.NewProgressBar("Conversion Rate")
 	conversionRate.Value = 75.0 // 75% conversion rate
 	conversionRate.MaxValue = 100.0
@@ -58,11 +61,21 @@ func main() {
 	filterBar.AddFilter(bussola.NewFilterText("Nome do Cliente", "client_name"))
 	filterBar.AddFilter(bussola.NewFilterSearch("Pesquisar", "search", "Search by name or ID"))
 
-	// Add components to the grid
 	mainGrid.AddItem(filterBar, 0, 0, 1, 3)
-	mainGrid.AddItem(sales, 1, 0, 1, 1)
-	mainGrid.AddItem(users, 1, 1, 1, 1)
-	mainGrid.AddItem(tma, 1, 2, 1, 1)
+
+	indicators := bussola.NewGrid("Indicators", 2, 4)
+	indicators.AddItem(sales, 0, 0, 1, 1)
+	indicators.AddItem(users, 0, 1, 1, 1)
+	indicators.AddItem(tma, 0, 2, 1, 1)
+	indicators.AddItem(issues, 0, 3, 1, 1)
+
+	indicators.AddItem(sales, 1, 0, 1, 1)
+	indicators.AddItem(users, 1, 1, 1, 1)
+	indicators.AddItem(tma, 1, 2, 1, 1)
+	indicators.AddItem(issues, 1, 3, 1, 1)
+
+	mainGrid.AddItem(indicators, 1, 0, 1, 3)
+
 	mainGrid.AddItem(nestedGrid, 2, 0, 1, 1)
 	mainGrid.AddItem(revenueChart, 2, 1, 1, 2) // Spans 2 columns
 	mainGrid.AddItem(userTable, 3, 0, 1, 2)
