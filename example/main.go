@@ -15,21 +15,21 @@ func main() {
 	mainGrid := bussola.NewGrid("Main Grid", 4, 3)
 
 	// Create some indicators
-	sales := bussola.NewIndicator("Total Sales", 15234.56)
+	sales := bussola.NewIndicator("Total Sales")
 	sales.Unit = "R$"
 	sales.Trend = 5.7 // 5.7% increase
 	sales.Target = "http://localhost:4040/api/v1/query/sales/indicator"
 
-	users := bussola.NewIndicator("Active Users", 1234)
+	users := bussola.NewIndicator("Active Users")
 	users.Description = "Currently active users"
 
-	tma := bussola.NewIndicator("TMA", 2.5) // Average time to action in minutes
+	tma := bussola.NewIndicator("TMA") // Average time to action in minutes
 	tma.Unit = "min"
 	tma.Description = "Average time to action (TMA)"
 	// Set the target URL for TMA
 	tma.Target = "http://localhost:4040/api/v1/query/tma/indicator"
 
-	issues := bussola.NewIndicator("Total Issues", 4567)
+	issues := bussola.NewIndicator("Total Issues")
 	issues.Unit = "Issues"
 
 	conversionRate := bussola.NewProgressBar("Conversion Rate")

@@ -84,11 +84,9 @@ type Indicator struct {
 	Description string  `json:"description"`
 }
 
-func NewIndicator(title string, value any) *Indicator {
-	return &Indicator{
-		Title: title,
-		Value: value,
-	}
+// NewIndicator create a new indicator
+func NewIndicator(title string) *Indicator {
+	return &Indicator{Title: title}
 }
 
 func (i *Indicator) Render() map[string]any {
@@ -112,6 +110,7 @@ type ProgressBar struct {
 	ShowPercent bool    `json:"showPercent"`
 }
 
+// NewProgressBar create a new progress bar
 func NewProgressBar(title string) *ProgressBar {
 	return &ProgressBar{
 		Title:       title,
@@ -130,9 +129,6 @@ func (p *ProgressBar) Render() map[string]any {
 		"percent":     (p.Value / p.MaxValue) * 100,
 	}
 }
-
-// FilterBar representa uma barra de filtros gerais
-// Pode conter vários tipos de filtros
 
 type FilterBar struct {
 	BaseWidget
@@ -247,6 +243,7 @@ type FilterNumber struct {
 func NewFilterNumber(label, key string, min, max float64) *FilterNumber {
 	return &FilterNumber{Label: label, Key: key, Min: min, Max: max}
 }
+
 func (f *FilterNumber) Render() map[string]any {
 	return map[string]any{
 		"type":  "number",
