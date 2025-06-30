@@ -44,13 +44,13 @@ func main() {
 	// Create a chart
 	revenueChart := bussola.NewChart("Revenue Over Time", "line")
 	revenueChart.Data = []float64{1200, 1900, 3000, 5000, 4100, 4500}
-	revenueChart.Options = map[string]interface{}{
+	revenueChart.Options = map[string]any{
 		"xAxis": []string{"Jan", "Feb", "Mar", "Apr", "May", "Jun"},
 		"color": "#1976D2",
 	}
 
 	userTable := bussola.NewTable("Recent Users", []string{"ID", "Name", "Last Access", "Status"})
-	userTable.Data = []map[string]interface{}{
+	userTable.Data = []map[string]any{
 		{"id": 1, "name": "John Doe", "lastAccess": "2025-06-26", "status": "Active"},
 		{"id": 2, "name": "Jane Smith", "lastAccess": "2025-06-25", "status": "Inactive"},
 	}

@@ -18,11 +18,11 @@ func (w *BaseWidget) Hide()              { w.hidden = true }
 // Chart represents a chart widget
 type Chart struct {
 	BaseWidget
-	Type     string      `json:"type"` // line, bar, pie, etc
-	Data     interface{} `json:"data"`
-	Options  interface{} `json:"options"`
-	Title    string      `json:"title"`
-	Subtitle string      `json:"subtitle"`
+	Type     string `json:"type"` // line, bar, pie, etc
+	Data     any    `json:"data"`
+	Options  any    `json:"options"`
+	Title    string `json:"title"`
+	Subtitle string `json:"subtitle"`
 }
 
 func NewChart(title string, chartType string) *Chart {
@@ -32,8 +32,8 @@ func NewChart(title string, chartType string) *Chart {
 	}
 }
 
-func (c *Chart) Render() map[string]interface{} {
-	return map[string]interface{}{
+func (c *Chart) Render() map[string]any {
+	return map[string]any{
 		"type":      "chart",
 		"title":     c.Title,
 		"subtitle":  c.Subtitle,
@@ -46,11 +46,11 @@ func (c *Chart) Render() map[string]interface{} {
 // Table represents a table widget with pagination
 type Table struct {
 	BaseWidget
-	Headers     []string                 `json:"headers"`
-	Data        []map[string]interface{} `json:"data"`
-	PageSize    int                      `json:"pageSize"`
-	CurrentPage int                      `json:"currentPage"`
-	Title       string                   `json:"title"`
+	Headers     []string         `json:"headers"`
+	Data        []map[string]any `json:"data"`
+	PageSize    int              `json:"pageSize"`
+	CurrentPage int              `json:"currentPage"`
+	Title       string           `json:"title"`
 }
 
 func NewTable(title string, headers []string) *Table {
@@ -62,8 +62,8 @@ func NewTable(title string, headers []string) *Table {
 	}
 }
 
-func (t *Table) Render() map[string]interface{} {
-	return map[string]interface{}{
+func (t *Table) Render() map[string]any {
+	return map[string]any{
 		"type":        "table",
 		"title":       t.Title,
 		"headers":     t.Headers,
@@ -76,23 +76,23 @@ func (t *Table) Render() map[string]interface{} {
 // Indicator represents a numeric indicator widget
 type Indicator struct {
 	BaseWidget
-	Title       string      `json:"title"`
-	Value       interface{} `json:"value"`
-	Target      interface{} `json:"target,omitempty"`
-	Unit        string      `json:"unit,omitempty"`
-	Trend       float64     `json:"trend,omitempty"`
-	Description string      `json:"description"`
+	Title       string  `json:"title"`
+	Value       any     `json:"value"`
+	Target      any     `json:"target,omitempty"`
+	Unit        string  `json:"unit,omitempty"`
+	Trend       float64 `json:"trend,omitempty"`
+	Description string  `json:"description"`
 }
 
-func NewIndicator(title string, value interface{}) *Indicator {
+func NewIndicator(title string, value any) *Indicator {
 	return &Indicator{
 		Title: title,
 		Value: value,
 	}
 }
 
-func (i *Indicator) Render() map[string]interface{} {
-	return map[string]interface{}{
+func (i *Indicator) Render() map[string]any {
+	return map[string]any{
 		"type":        "indicator",
 		"title":       i.Title,
 		"value":       i.Value,
@@ -120,8 +120,8 @@ func NewProgressBar(title string) *ProgressBar {
 	}
 }
 
-func (p *ProgressBar) Render() map[string]interface{} {
-	return map[string]interface{}{
+func (p *ProgressBar) Render() map[string]any {
+	return map[string]any{
 		"type":        "progressBar",
 		"title":       p.Title,
 		"value":       p.Value,
@@ -141,7 +141,7 @@ type FilterBar struct {
 }
 
 type Filter interface {
-	Render() map[string]interface{}
+	Render() map[string]any
 }
 
 func NewFilterBar(title string) *FilterBar {
@@ -155,12 +155,12 @@ func (f *FilterBar) AddFilter(filter Filter) {
 	f.Filters = append(f.Filters, filter)
 }
 
-func (f *FilterBar) Render() map[string]interface{} {
-	filters := []map[string]interface{}{}
+func (f *FilterBar) Render() map[string]any {
+	filters := []map[string]any{}
 	for _, flt := range f.Filters {
 		filters = append(filters, flt.Render())
 	}
-	return map[string]interface{}{
+	return map[string]any{
 		"type":    "filterBar",
 		"title":   f.Title,
 		"filters": filters,
@@ -176,8 +176,8 @@ func NewFilterDate(label, key string) *FilterDate {
 	return &FilterDate{Label: label, Key: key}
 }
 
-func (f *FilterDate) Render() map[string]interface{} {
-	return map[string]interface{}{
+func (f *FilterDate) Render() map[string]any {
+	return map[string]any{
 		"type":  "date",
 		"label": f.Label,
 		"key":   f.Key,
@@ -194,8 +194,8 @@ func NewFilterSelect(label, key string, options []string) *FilterSelect {
 	return &FilterSelect{Label: label, Key: key, Options: options}
 }
 
-func (f *FilterSelect) Render() map[string]interface{} {
-	return map[string]interface{}{
+func (f *FilterSelect) Render() map[string]any {
+	return map[string]any{
 		"type":    "select",
 		"label":   f.Label,
 		"key":     f.Key,
@@ -212,8 +212,8 @@ func NewFilterText(label, key string) *FilterText {
 	return &FilterText{Label: label, Key: key}
 }
 
-func (f *FilterText) Render() map[string]interface{} {
-	return map[string]interface{}{
+func (f *FilterText) Render() map[string]any {
+	return map[string]any{
 		"type":  "text",
 		"label": f.Label,
 		"key":   f.Key,
@@ -229,8 +229,8 @@ func NewFilterBool(label, key string) *FilterBool {
 	return &FilterBool{Label: label, Key: key}
 }
 
-func (f *FilterBool) Render() map[string]interface{} {
-	return map[string]interface{}{
+func (f *FilterBool) Render() map[string]any {
+	return map[string]any{
 		"type":  "bool",
 		"label": f.Label,
 		"key":   f.Key,
@@ -247,8 +247,8 @@ type FilterNumber struct {
 func NewFilterNumber(label, key string, min, max float64) *FilterNumber {
 	return &FilterNumber{Label: label, Key: key, Min: min, Max: max}
 }
-func (f *FilterNumber) Render() map[string]interface{} {
-	return map[string]interface{}{
+func (f *FilterNumber) Render() map[string]any {
+	return map[string]any{
 		"type":  "number",
 		"label": f.Label,
 		"key":   f.Key,
@@ -268,8 +268,8 @@ func NewFilterRange(label, key string, min, max float64) *FilterRange {
 	return &FilterRange{Label: label, Key: key, Min: min, Max: max}
 }
 
-func (f *FilterRange) Render() map[string]interface{} {
-	return map[string]interface{}{
+func (f *FilterRange) Render() map[string]any {
+	return map[string]any{
 		"type":  "range",
 		"label": f.Label,
 		"key":   f.Key,
@@ -288,8 +288,8 @@ func NewFilterCheckbox(label, key string, options []string) *FilterCheckbox {
 	return &FilterCheckbox{Label: label, Key: key, Options: options}
 }
 
-func (f *FilterCheckbox) Render() map[string]interface{} {
-	return map[string]interface{}{
+func (f *FilterCheckbox) Render() map[string]any {
+	return map[string]any{
 		"type":    "checkbox",
 		"label":   f.Label,
 		"key":     f.Key,
@@ -307,8 +307,8 @@ func NewFilterRadio(label, key string, options []string) *FilterRadio {
 	return &FilterRadio{Label: label, Key: key, Options: options}
 }
 
-func (f *FilterRadio) Render() map[string]interface{} {
-	return map[string]interface{}{
+func (f *FilterRadio) Render() map[string]any {
+	return map[string]any{
 		"type":    "radio",
 		"label":   f.Label,
 		"key":     f.Key,
@@ -326,8 +326,8 @@ func NewFilterMultiSelect(label, key string, options []string) *FilterMultiSelec
 	return &FilterMultiSelect{Label: label, Key: key, Options: options}
 }
 
-func (f *FilterMultiSelect) Render() map[string]interface{} {
-	return map[string]interface{}{
+func (f *FilterMultiSelect) Render() map[string]any {
+	return map[string]any{
 		"type":    "multiSelect",
 		"label":   f.Label,
 		"key":     f.Key,
@@ -347,8 +347,8 @@ func NewFilterSlider(label, key string, min, max, value float64) *FilterSlider {
 	return &FilterSlider{Label: label, Key: key, Min: min, Max: max, Value: value}
 }
 
-func (f *FilterSlider) Render() map[string]interface{} {
-	return map[string]interface{}{
+func (f *FilterSlider) Render() map[string]any {
+	return map[string]any{
 		"type":  "slider",
 		"label": f.Label,
 		"key":   f.Key,
@@ -367,8 +367,8 @@ func NewFilterToggle(label, key string) *FilterToggle {
 	return &FilterToggle{Label: label, Key: key}
 }
 
-func (f *FilterToggle) Render() map[string]interface{} {
-	return map[string]interface{}{
+func (f *FilterToggle) Render() map[string]any {
+	return map[string]any{
 		"type":  "toggle",
 		"label": f.Label,
 		"key":   f.Key,
@@ -385,8 +385,8 @@ func NewFilterSearch(label, key, placeholder string) *FilterSearch {
 	return &FilterSearch{Label: label, Key: key, Placeholder: placeholder}
 }
 
-func (f *FilterSearch) Render() map[string]interface{} {
-	return map[string]interface{}{
+func (f *FilterSearch) Render() map[string]any {
+	return map[string]any{
 		"type":        "search",
 		"label":       f.Label,
 		"key":         f.Key,
@@ -404,8 +404,8 @@ func NewFilterColor(label, key, value string) *FilterColor {
 	return &FilterColor{Label: label, Key: key, Value: value}
 }
 
-func (f *FilterColor) Render() map[string]interface{} {
-	return map[string]interface{}{
+func (f *FilterColor) Render() map[string]any {
+	return map[string]any{
 		"type":  "color",
 		"label": f.Label,
 		"key":   f.Key,
@@ -454,10 +454,10 @@ func (r *Ranking) SetOrder(order string) {
 	}
 }
 
-func (r *Ranking) Render() map[string]interface{} {
-	items := []map[string]interface{}{}
+func (r *Ranking) Render() map[string]any {
+	items := []map[string]any{}
 	for _, it := range r.Items {
-		item := map[string]interface{}{
+		item := map[string]any{
 			"position":    it.Position,
 			"title":       it.Title,
 			"description": it.Description,
@@ -467,7 +467,7 @@ func (r *Ranking) Render() map[string]interface{} {
 		}
 		items = append(items, item)
 	}
-	return map[string]interface{}{
+	return map[string]any{
 		"type":  "ranking",
 		"title": r.Title,
 		"order": r.Order,

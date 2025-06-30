@@ -46,8 +46,8 @@ func (d *Dashboard) SetTheme(theme *Theme) {
 }
 
 // Render generates a JSON representation of the dashboard
-func (d *Dashboard) Render() map[string]interface{} {
-	result := make(map[string]interface{})
+func (d *Dashboard) Render() map[string]any {
+	result := make(map[string]any)
 	result["title"] = d.Title
 	result["description"] = d.Description
 	result["theme"] = d.Theme

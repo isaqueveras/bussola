@@ -87,19 +87,19 @@ func (g *Grid) AddNext(component Component, values ...int) {
 }
 
 // Render generates a JSON representation of the grid
-func (g *Grid) Render() map[string]interface{} {
-	result := make(map[string]interface{})
+func (g *Grid) Render() map[string]any {
+	result := make(map[string]any)
 	result["title"] = g.Title
 	result["rows"] = g.Rows
 	result["columns"] = g.Columns
 	result["spacing"] = g.Spacing
 	result["padding"] = g.Padding
 
-	cells := []map[string]interface{}{}
+	cells := []map[string]any{}
 	for i := range g.Cells {
 		for j := range g.Cells[i] {
 			if cell := g.Cells[i][j]; cell != nil {
-				cellData := map[string]interface{}{
+				cellData := map[string]any{
 					"row":     cell.Row,
 					"column":  cell.Column,
 					"rowSpan": cell.RowSpan,

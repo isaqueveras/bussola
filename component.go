@@ -6,7 +6,7 @@ type Component interface {
 	Resize(size Size)
 	Position() Position
 	Move(pos Position)
-	Render() map[string]interface{}
+	Render() map[string]any
 }
 
 // CanvasObject represents a visual component that can be added to a container
